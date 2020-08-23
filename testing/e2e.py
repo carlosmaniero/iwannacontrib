@@ -8,6 +8,9 @@ from selenium import webdriver
 import os
 
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
 
 CHROME_URL_MAC = 'https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_mac64.zip'
 CHROME_URL_LINUX = 'https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_linux64.zip'
@@ -32,6 +35,11 @@ class E2ETesting(LiveServerTestCase):
         chrome_options.add_argument('--disable-dev-shm-usage')
 
         self.webdriver = webdriver.Chrome(CHROME_DRIVER_PATH, options=chrome_options)
+
+    def fetch(self, url):
+        self.webdriver.get(f'http://localhost:8000{url}')
+        element_present = expected_conditions.presence_of_element_located((By.ID, 'iwannatocontrib_body'))
+        WebDriverWait(self.webdriver, 10).until(element_present)
 
     def _download_chrome(self):
         if not os.path.exists(CHROME_DIR):

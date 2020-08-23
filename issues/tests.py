@@ -150,10 +150,7 @@ class FormIntegrationTest(TestCase):
 
 class CreateIssueE2E(E2ETesting):
     def testInitialForm(self):
-        self.webdriver.get('http://localhost:8000/issues/create')
-
-        print(self.webdriver.page_source)
-
+        self.fetch('/issues/create')
         input_label = self.webdriver.find_element_by_css_selector('[for=id_url]')
 
         self.assertEquals(input_label.text, 'Github Issue URL:')
