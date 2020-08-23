@@ -31,3 +31,16 @@ def show_issue(request, owner: str, repository: str, number: int):
     return render(request, 'issues/show_issue.html', {
         "issue": issue
     })
+
+
+def rate(request, owner: str, repository: str, number: int):
+    issue = Issue.objects.get(
+        repository__owner__owner=owner,
+        repository__name=repository,
+        number=number
+    )
+
+    issue.rate(int(request.POST['rate']))
+    issue.save()
+
+    return redirect(issue.get_url())

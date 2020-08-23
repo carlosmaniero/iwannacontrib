@@ -14,9 +14,20 @@
 
         <h2 id="main_language">{{ issue.main_language }}</h2>
 
+        <h3 id="rate_label">{{ issue.rate_label }}</h3>
+
         <div id="issue-body">
             {{ issue.body | markdown }}
         </div>
+
+        <form method="post" action="{{ issue.get_rate_url }}">
+            {% csrf_token %}
+            <button name="rate" value="1" title="Rate as Very Easy">Very Easy</button>
+            <button name="rate" value="2" title="Rate as Easy">Easy</button>
+            <button name="rate" value="3" title="Rate as Medium">Medium</button>
+            <button name="rate" value="4" title="Rate as Hard">Hard</button>
+            <button name="rate" value="5" title="Rate as Very Hard">Very Hard</button>
+        </form>
     </article>
 </body>
 </html>

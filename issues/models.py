@@ -41,6 +41,13 @@ class Issue(models.Model):
             "number": self.number
         })
 
+    def get_rate_url(self) -> str:
+        return reverse("issues:rate", kwargs={
+            "owner": self.repository.owner.owner,
+            "repository": self.repository.name,
+            "number": self.number
+        })
+
     @property
     def rate_label(self):
         if self.current_rate is None:
