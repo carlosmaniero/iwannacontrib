@@ -1,11 +1,15 @@
 import unittest
 
-from django.test import TestCase
+from django.test import TestCase, LiveServerTestCase
 from github import Github
+from prompt_toolkit.keys import Keys
+from selenium import webdriver
 
+from issues.forms import CreateIssueForm
 from issues.models import Issue, Repository, Owner
 from issues.services.create_issue_service import IssueToBeCreated, InvalidGithubUrlException, CreateIssueService, \
     IssueNotFoundException, IssueAlreadyExists
+from testing.e2e import E2ETesting
 
 
 class IssueToBeCreatedTestCase(unittest.TestCase):
@@ -113,3 +117,41 @@ class CreateIssueServiceIntegrationTest(TestCase):
             service.create_issue(self.github, issue_to_be_created)
 
         self.assertEquals(context.exception.url, issues_url)
+
+
+class FormIntegrationTest(TestCase):
+    def test_it_is_invalid_given_an_non_issue_url(self):
+        bitbucket_url = "http://bitbucket.com/carlosmaniero/lala"
+
+        form = CreateIssueForm({
+            "url": bitbucket_url
+        })
+
+        self.assertFalse(form.is_valid(), "Form must not be valid")
+        self.assertEquals(
+            form.errors['url'][0],
+            "It must be a Github issue URL. Found: http://bitbucket.com/carlosmaniero/lala"
+        )
+
+    def test_it_is_invalid_given_no_url(self):
+        form = CreateIssueForm({
+            "url": None
+        })
+
+        self.assertFalse(form.is_valid(), "url is required")
+
+    def test_it_is_invalid_given_empty_url(self):
+        form = CreateIssueForm({
+            "url": ""
+        })
+
+        self.assertFalse(form.is_valid(), "url is required")
+
+
+class CreateIssueE2E(E2ETesting):
+    def testInitialForm(self):
+        self.webdriver.get('http://127.0.0.1:8000/issues/create')
+
+        input_label = self.webdriver.find_element_by_css_selector('[for=id_url]')
+
+        self.assertEquals(input_label.text, 'Github Issue URL:')
