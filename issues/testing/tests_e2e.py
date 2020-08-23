@@ -1,4 +1,5 @@
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.select import Select
 
 from testing.e2e import E2ETesting, BasePageObject
 
@@ -39,6 +40,37 @@ class IssuePageObject(BasePageObject):
 
     def rate(self, level: str):
         self.webdriver.find_element_by_css_selector(f'button[title="Rate as {level}"]').click()
+
+
+class SearchPageObject(BasePageObject):
+    @property
+    def all_languages(self):
+        language_select = self.webdriver.find_element_by_name('language')
+        return [option.get_attribute("value") for option in language_select.find_elements_by_tag_name("option")]
+
+    @property
+    def all_rates(self):
+        language_select = self.webdriver.find_element_by_name('rate')
+        return [option.get_attribute("value") for option in language_select.find_elements_by_tag_name("option")]
+
+    @property
+    def results(self):
+        results = self.webdriver.find_elements_by_css_selector('#result h1')
+        return [result.text for result in results]
+
+    def select_language(self, language):
+        select = Select(self.webdriver.find_element_by_name('language'))
+        select.select_by_visible_text(language)
+
+    def select_rate(self, rate):
+        select = Select(self.webdriver.find_element_by_name('rate'))
+        select.select_by_visible_text(rate)
+
+    def do_search(self):
+        self.webdriver.find_element_by_tag_name('button').click()
+
+    def click_at_result(self, link_text):
+        self.webdriver.find_element_by_link_text(link_text).click()
 
 
 class CreateIssueE2E(E2ETesting):
@@ -93,3 +125,32 @@ class RatingIssueE2E(E2ETesting):
     def assert_level(self, level):
         self.issue_page.rate(level)
         self.assertEquals(self.issue_page.rate_level, level)
+
+
+class SearchIssueE2E(E2ETesting):
+    def setUp(self) -> None:
+        self.fetch('/issues/create')
+        create_issue_page_object = CreateIssuePageObject(self.webdriver)
+        create_issue_page_object.fill_url(
+            "https://github.com/carlosmaniero/iwannacontrib-issues-test-integration-test/issues/1"
+        )
+        create_issue_page_object.submit()
+        self.fetch('/')
+        self.issue_page = IssuePageObject(self.webdriver)
+        self.search_page = SearchPageObject(self.webdriver)
+
+    def test_has_all_filters(self):
+        self.assertEquals(self.search_page.all_languages, ['', 'Python'])
+        self.assertEquals(self.search_page.all_rates, ['', 'all', '1', '2', '3', '4', '5'])
+
+    def test_search_journey(self):
+        self.search_page.select_language('Python')
+        self.search_page.select_rate('Not Rated')
+        self.search_page.do_search()
+        self.assertEquals(self.search_page.results, ['Test Issue'])
+
+        self.search_page.click_at_result('Test Issue')
+
+        self.assertTrue(self.issue_page.issue_title, 'Test Issue')
+        self.assertEquals(self.issue_page.issue_body, 'This issue is used at project integration tests.')
+        self.assertEquals(self.issue_page.main_language, 'Python')

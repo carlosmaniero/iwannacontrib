@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>I Wanna Help</title>
+</head>
+<body>
+    <h1>I Wanna Help!</h1>
+
+    <form action="">
+        {{ form }}
+        <button>Search</button>
+    </form>
+
+    <section id="result">
+        {% for issue in form.results %}
+            <h1>
+                <a href="{{ issue.get_url }}">
+                    {{ issue.name }}
+                </a>
+            </h1>
+        {% endfor %}
+
+    </section>
+</body>
+</html>
