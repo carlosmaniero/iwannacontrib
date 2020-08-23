@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Chrome Web Driver
+.chrome/
+
 # Code Editor
 .idea/
 *.iml
