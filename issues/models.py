@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Owner(models.Model):
@@ -22,3 +23,10 @@ class Issue(models.Model):
 
     class Meta:
         unique_together = (("repository", "number"),)
+
+    def get_url(self) -> str:
+        return reverse("issues:show", kwargs={
+            "owner": self.repository.owner.owner,
+            "repository": self.repository.name,
+            "number": self.number
+        })

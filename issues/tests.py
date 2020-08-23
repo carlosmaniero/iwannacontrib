@@ -1,15 +1,12 @@
 import unittest
 
-from django.test import TestCase, LiveServerTestCase
+from django.test import TestCase
 from github import Github
-from prompt_toolkit.keys import Keys
-from selenium import webdriver
 
 from issues.forms import CreateIssueForm
 from issues.models import Issue, Repository, Owner
 from issues.services.create_issue_service import IssueToBeCreated, InvalidGithubUrlException, CreateIssueService, \
     IssueNotFoundException, IssueAlreadyExists
-from testing.e2e import E2ETesting
 
 
 class IssueToBeCreatedTestCase(unittest.TestCase):
@@ -146,11 +143,3 @@ class FormIntegrationTest(TestCase):
         })
 
         self.assertFalse(form.is_valid(), "url is required")
-
-
-class CreateIssueE2E(E2ETesting):
-    def testInitialForm(self):
-        self.fetch('/issues/create')
-        input_label = self.webdriver.find_element_by_css_selector('[for=id_url]')
-
-        self.assertEquals(input_label.text, 'Github Issue URL:')

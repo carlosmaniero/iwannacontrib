@@ -1,3 +1,4 @@
+import os
 import stat
 from sys import platform
 from zipfile import ZipFile
@@ -5,12 +6,8 @@ from zipfile import ZipFile
 import requests
 from django.test import LiveServerTestCase
 from selenium import webdriver
-import os
-
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 CHROME_URL_MAC = 'https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_mac64.zip'
 CHROME_URL_LINUX = 'https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_linux64.zip'
@@ -20,9 +17,6 @@ CHROME_ZIP_PATH = '.chrome/driver.zip'
 
 
 class E2ETesting(LiveServerTestCase):
-
-    def tearDown(self) -> None:
-        self.webdriver.close()
 
     def __init__(self, *args, **kwargs):
         super(E2ETesting, self).__init__(*args, **kwargs)
@@ -36,6 +30,10 @@ class E2ETesting(LiveServerTestCase):
         chrome_options.add_argument('--disable-dev-shm-usage')
 
         self.webdriver = webdriver.Chrome(CHROME_DRIVER_PATH, options=chrome_options)
+
+    def tearDown(self) -> None:
+        self.webdriver.close()
+        self.webdriver.quit()
 
     def fetch(self, url):
         url = f'{self.live_server_url}{url}'
@@ -60,3 +58,8 @@ class E2ETesting(LiveServerTestCase):
         if platform == "linux" or platform == "linux2":
             return CHROME_URL_LINUX
         return CHROME_URL_MAC
+
+
+class BasePageObject:
+    def __init__(self, webdriver: WebDriver):
+        self.webdriver = webdriver
