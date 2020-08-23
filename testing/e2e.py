@@ -20,6 +20,7 @@ CHROME_ZIP_PATH = '.chrome/driver.zip'
 
 
 class E2ETesting(LiveServerTestCase):
+
     def tearDown(self) -> None:
         self.webdriver.close()
 
@@ -37,9 +38,8 @@ class E2ETesting(LiveServerTestCase):
         self.webdriver = webdriver.Chrome(CHROME_DRIVER_PATH, options=chrome_options)
 
     def fetch(self, url):
-        self.webdriver.get(f'http://localhost:8000{url}')
-        element_present = expected_conditions.presence_of_element_located((By.ID, 'iwannatocontrib_body'))
-        WebDriverWait(self.webdriver, 10).until(element_present)
+        url = f'{self.live_server_url}{url}'
+        self.webdriver.get(url)
 
     def _download_chrome(self):
         if not os.path.exists(CHROME_DIR):
