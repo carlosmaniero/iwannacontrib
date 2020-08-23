@@ -3,6 +3,7 @@ import re
 from github import Github
 
 from issues.models import Issue, Repository, Owner
+from triage.models import ProgrammingLanguage
 
 
 class InvalidGithubUrlException(Exception):
@@ -67,10 +68,16 @@ class CreateIssueService:
             number=issue_to_be_created.number,
             name=github_issue.title,
             body=github_issue.body,
-            repository=repository
+            repository=repository,
+            main_language=self._get_main_language(github_issue)
         )
         issue.save()
         return issue
+
+    def _get_main_language(self, github_issue):
+        languages = iter(github_issue.repository.get_languages().keys())
+        main_language_name = next(languages)
+        return ProgrammingLanguage.objects.get_or_create(name=main_language_name)[0]
 
     def _get_github_issue(self, github: Github, issue_to_be_created: IssueToBeCreated):
         try:

@@ -7,6 +7,7 @@ from issues.forms import CreateIssueForm
 from issues.models import Issue, Repository, Owner
 from issues.services.create_issue_service import IssueToBeCreated, InvalidGithubUrlException, CreateIssueService, \
     IssueNotFoundException, IssueAlreadyExists
+from triage.models import ProgrammingLanguage
 
 
 class IssueToBeCreatedTestCase(unittest.TestCase):
@@ -75,6 +76,7 @@ class CreateIssueServiceIntegrationTest(TestCase):
         self.assertEquals(issue.body, "This issue is used at project integration tests.")
         self.assertEquals(issue.repository.name, "iwannacontrib-issues-test-integration-test")
         self.assertEquals(issue.repository.owner.owner, "carlosmaniero")
+        self.assertEquals(issue.main_language.name, "Python")
 
     def test_is_saves_the_issue(self) -> None:
         issue_to_be_created = IssueToBeCreated("https://github.com/carlosmaniero/iwannacontrib-issues-test"
@@ -99,6 +101,7 @@ class CreateIssueServiceIntegrationTest(TestCase):
             number=1,
             name='any title',
             body='any body',
+            main_language=ProgrammingLanguage.get_other_default_language(),
             repository=Repository.objects.create(
                 name='iwannacontrib-issues-test-integration-test',
                 owner=Owner.objects.create(owner='carlosmaniero')
@@ -143,3 +146,52 @@ class FormIntegrationTest(TestCase):
         })
 
         self.assertFalse(form.is_valid(), "url is required")
+
+
+class IssueModel(TestCase):
+    def setUp(self) -> None:
+        self.issue = Issue(
+            number=1,
+            name='any title',
+            body='any body',
+            main_language=ProgrammingLanguage.get_other_default_language(),
+            repository=Repository.objects.create(
+                name='iwannacontrib-issues-test-integration-test',
+                owner=Owner.objects.create(owner='carlosmaniero')
+            )
+        )
+        self.issue.save()
+
+    def test_by_default_the_rate_level_is_not_rated(self):
+        self.assertEquals(self.issue.rate_label, 'Not rated yet')
+
+    def test_it_rates_the_issue_as_very_easy(self):
+        self.issue.rate(1)
+        self.assertEquals(self.issue.rate_label, 'Very Easy')
+
+    def test_it_rates_the_issue_as_easy(self):
+        self.issue.rate(2)
+        self.assertEquals(self.issue.rate_label, 'Easy')
+
+    def test_it_rates_the_issue_as_medium(self):
+        self.issue.rate(3)
+        self.assertEquals(self.issue.rate_label, 'Medium')
+
+    def test_it_rates_the_issue_as_hard(self):
+        self.issue.rate(4)
+        self.assertEquals(self.issue.rate_label, 'Hard')
+
+    def test_it_rates_the_issue_as_very_hard(self):
+        self.issue.rate(5)
+        self.assertEquals(self.issue.rate_label, 'Very Hard')
+
+    def test_it_defines_the_current_rate_as_the_rate_avg(self):
+        self.issue.rate(5)
+        self.issue.rate(1)
+        self.assertEquals(self.issue.rate_label, 'Medium')
+
+    def test_it_rounds_the_avg(self):
+        self.issue.rate(5)
+        self.issue.rate(5)
+        self.issue.rate(4)
+        self.assertEquals(self.issue.rate_label, 'Very Hard')

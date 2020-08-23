@@ -12,6 +12,8 @@
     <article>
         <h1>{{ issue.name }}</h1>
 
+        <h2 id="main_language">{{ issue.main_language }}</h2>
+
         <div id="issue-body">
             {{ issue.body | markdown }}
         </div>

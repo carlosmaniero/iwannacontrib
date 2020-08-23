@@ -29,6 +29,10 @@ class IssuePageObject(BasePageObject):
     def issue_body(self) -> str:
         return self.webdriver.find_element_by_id('issue-body').text
 
+    @property
+    def main_language(self) -> str:
+        return self.webdriver.find_element_by_id('main_language').text
+
 
 class CreateIssueE2E(E2ETesting):
     def test_it_shows_an_error_given_an_invalid_input(self):
@@ -49,3 +53,4 @@ class CreateIssueE2E(E2ETesting):
         issue_page = IssuePageObject(self.webdriver)
         self.assertTrue(issue_page.issue_title, 'Test Issue')
         self.assertTrue(issue_page.issue_body, 'This issue is used at project integration tests.')
+        self.assertTrue(issue_page.main_language, 'Python')
