@@ -1,9 +1,64 @@
 {% extends 'base.html' %}
 
 {% block main_content %}
-    <form action="{% url "issues:create" %}" method="post">
+    <style>
+
+        .section-box {
+            margin-top: 20px;
+            background: #F0F0F2;
+            padding: 20px;
+            border-radius: 20px;
+            display: flex;
+            min-width: 190px;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .section-box h3 {
+            margin: 0;
+        }
+
+        .form-content {
+            display: flex;
+            flex-direction: column;
+            max-width: 500px;
+        }
+
+        .errorlist {
+            color: #F44336;
+        }
+
+        .create-form label {
+            margin-bottom: 10px;
+        }
+        .create-form input {
+            border: 1px solid #ccc;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 10px;
+        }
+        .create-form .button {
+            border: 0;
+            padding: 15px;
+            border-radius: 10px;
+            color: #ffffff;
+            background: #04BF9D;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            transition: all 0.5s;
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+
+    <div class="">
+        <h1>Do you need contributors to you project?</h1>
+
+        <p>Just past an issue URL above and we will help you to share it thought our platform!</p>
+    </div>
+
+    <form action="{% url "issues:create" %}" method="post" class="section-box create-form">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Submit">
+        <input type="submit" class="button" value="Submit">
     </form>
 {% endblock %}
