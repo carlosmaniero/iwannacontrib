@@ -138,14 +138,40 @@ class SearchIssueE2E(E2ETesting):
         self.assertEquals(self.search_page.all_languages, ['', 'Python'])
         self.assertEquals(self.search_page.all_rates, ['', 'all', '1', '2', '3', '4', '5'])
 
+    def test_default_seo_information(self):
+        self.assertEquals(self.search_page.page_title, 'Be a contributor to open source | Let me Contrib!')
+        self.assertEquals(
+            self.search_page.meta_description,
+            'Find an issue that is perfect with your skills and contribute to open source projects.'
+        )
+
+    def test_search_seo_information(self):
+        self.search_page.select_language('Python')
+        self.search_page.select_rate('Not Rated')
+        self.search_page.do_search()
+
+        self.assertEquals(self.search_page.page_title, 'Let me contrib with Python to Open Source | Let me Contrib!')
+
+        self.assertEquals(
+            self.search_page.meta_description,
+            'Find an Python issue that is perfect with your skills and contribute to open source projects.'
+        )
+
     def test_search_journey(self):
         self.search_page.select_language('Python')
         self.search_page.select_rate('Not Rated')
+
         self.search_page.do_search()
         self.assertEquals(self.search_page.results, ['Python Not rated yet #1 any title 1'])
 
         self.search_page.click_at_result('Python Not rated yet #1 any title 1')
 
-        self.assertTrue(self.issue_page.issue_title, 'Test Issue')
+        self.assertEquals(self.issue_page.page_title, 'Contrib to a Python issue: any title 1 | Let me Contrib!')
+        self.assertEquals(
+            self.issue_page.meta_description,
+            'The Python repository iwannacontrib-issues-test-integration-test needs your help. Contribute to any '
+            'title 1.'
+        )
+        self.assertEquals(self.issue_page.issue_title, 'Python Not rated yet #1 any title 1')
         self.assertEquals(self.issue_page.issue_body, 'any body')
         self.assertEquals(self.issue_page.main_language, 'Python')

@@ -29,6 +29,22 @@ class SearchForm(forms.Form):
 
         return Issue.objects.filter(**query).order_by('-created_at')[:1000]
 
+    @property
+    def search_title(self):
+        if not self.is_valid():
+            return 'Be a contributor to open source'
+
+        language = self.cleaned_data.get('language')
+        return f'Let me contrib with {language} to Open Source'
+
+    @property
+    def search_meta_description(self):
+        if not self.is_valid():
+            return 'Find an issue that is perfect with your skills and contribute to open source projects.'
+
+        language = self.cleaned_data.get('language')
+        return f'Find an {language} issue that is perfect with your skills and contribute to open source projects.'
+
     def _get_rate(self):
         rate = self.cleaned_data.get('rate')
 

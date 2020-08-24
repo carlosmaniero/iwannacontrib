@@ -67,3 +67,11 @@ class BasePageObject:
     @property
     def messages(self):
         return [message.text for message in self.webdriver.find_elements_by_css_selector('.messages li')]
+
+    @property
+    def page_title(self):
+        return self.webdriver.title
+
+    @property
+    def meta_description(self):
+        return self.webdriver.find_element_by_xpath("//meta[@name='description']").get_attribute("content")

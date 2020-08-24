@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
-{% block main_content %}
+{% block page_title %}{{ form.search_title}}{% endblock %}
 
+{% block meta_description %}{{ form.search_meta_description }}{% endblock %}
+
+{% block main_content %}
     <style>
     .main-home {
         margin: 20px 0 40px;

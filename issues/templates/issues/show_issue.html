@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
-{% load markdown_deux_tags %}
+
+{% block page_title %}Contrib to a {{ issue.main_language }} issue: {{ issue.name }}{% endblock %}
+{% block meta_description %}The Python repository {{ issue.repository.name }} needs your help. Contribute to {{ issue.name }}.{% endblock %}
 
 {% block main_content %}
     <style>
