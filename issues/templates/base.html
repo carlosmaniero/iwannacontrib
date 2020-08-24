@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700&display=swap" rel="stylesheet">
+
+    <title>Let me Contrib to Open Source</title>
+
+    <style>
+        body {
+            padding: 85px 0 0 0;
+            margin: 0;
+            font-family: "Raleway", Verdana, Arial, sans-serif;
+        }
+
+        .main-header {
+            background: #038C73;
+            position: fixed;
+            width: 100%;
+            line-height: 65px;
+            top: 0;
+            left: 0;
+        }
+
+        .main-header .header-content {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .main-header a.home_link {
+            color: #ffffff;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .main-header a.publish_issue {
+            text-decoration: none;
+            color: #ffffff;
+            border-radius: 20px;
+            padding: 5px 15px;
+            background: #04BF9D;
+        }
+
+        .center-content {
+            margin: 0 auto;
+            max-width: 1024px;
+            padding: 0 20px;
+        }
+
+        .issue-rate- {
+            background: #F0F0F2;
+        }
+
+        .issue-rate-1 {
+            background: #00BF54;
+        }
+
+        .issue-rate-2 {
+            background: #008359;
+        }
+
+        .issue-rate-3 {
+            background: #FFDE4B;
+        }
+
+        .issue-rate-4 {
+            background: #EF434D;
+        }
+
+        .issue-rate-5 {
+            background: #BE1846;
+        }
+
+        .issue-title h2 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 100;
+            display: flex;
+            align-items: center;
+        }
+        .issue-title h2 img {
+            margin-right: 10px;
+        }
+        .issue-title h1 {
+            margin: 10px 0 0 0;
+            font-weight: 400;
+        }
+
+        .issue-title h1 span {
+            text-decoration: none;
+            padding: 5px 10px;
+            display: inline-block;
+            font-size: 60%;
+        }
+        .issue-title h1 span.issue-number {
+            background: #F0F0F2;
+        }
+
+        .issue-title a {
+            color: #000000;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="center-content header-content">
+            <a href="{% url 'home' %}" class="home_link">
+                Let me Contrib!
+            </a>
+
+            <div>
+                <a href="{% url 'issues:create' %}" class="publish_issue">Publish an Issue</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="center-content">
+        {% block main_content %}
+        {% endblock %}
+    </div>
+
+    {% block after_main_content %}
+    {% endblock %}
+</body>
+</html>

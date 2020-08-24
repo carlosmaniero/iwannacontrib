@@ -1,3 +1,4 @@
+import markdown
 from django.db import models
 from django.urls import reverse
 
@@ -48,12 +49,26 @@ class Issue(models.Model):
             "number": self.number
         })
 
+    def get_repository_name(self) -> str:
+        return f'{self.repository.owner.owner}/{self.repository.name}'
+
+    def get_owner_avatar(self):
+        return f'https://github.com/{self.repository.owner.owner}.png?size=24'
+
     @property
     def rate_label(self):
         if self.current_rate is None:
             return 'Not rated yet'
 
         return self.current_rate.get_rate_display()
+
+    @property
+    def html(self):
+        return markdown.markdown(self.body, extensions=['fenced_code'])
+
+    @property
+    def external_url(self):
+        return f'https://github.com/{self.repository.owner.owner}/{self.repository.name}/issues/{self.number}'
 
     def rate(self, rate_number: int):
         rate = IssueRate.objects.get_or_create(rate=rate_number)[0]

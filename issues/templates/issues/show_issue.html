@@ -1,33 +1,121 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {% load markdown_deux_tags %}
-    <title>Document</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load markdown_deux_tags %}
+
+{% block main_content %}
+    <style>
+        #issue-body img {
+            max-width: 100%;
+        }
+        #issue-body code {
+            background: #F0F0F2;
+            padding: 2px 4px;
+        }
+        #issue-body pre {
+            background: #F0F0F2;
+            padding: 20px;
+            display: block;
+            overflow: auto;
+        }
+        #issue-body pre code {
+            padding: 0;
+        }
+
+        .section-box {
+            margin-top: 20px;
+            background: #F0F0F2;
+            padding: 20px;
+            border-radius: 20px;
+            display: flex;
+            min-width: 190px;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .section-box h3 {
+            margin: 0;
+        }
+
+        .section-box .buttons {
+            margin-top: -10px;
+        }
+
+        .action-button {
+            border: 0;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #ffffff;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .action-button.go-to-button {
+            background: #04BF9D;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+        }
+
+
+        #action-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-gap: 20px;
+            overflow: auto;
+        }
+    </style>
     <article>
-        <h1>{{ issue.name }}</h1>
+        <header class="issue-header">
+            {% include "issues/partials/issue_title.html" %}
+        </header>
 
-        <h2 id="main_language">{{ issue.main_language }}</h2>
+        <div id="action-section">
+            <section class="section-box solve-section">
+                <div class="content">
+                    <h3>I can solve this issue!</h3>
 
-        <h3 id="rate_label">{{ issue.rate_label }}</h3>
+                    <p>If you believe that you can help to solve this issue go to repository and start to interact with the maintainers.</p>
+                </div>
 
-        <div id="issue-body">
-            {{ issue.body | markdown }}
+                <div class="buttons">
+                    <a href="{{ issue.external_url }}" class="action-button go-to-button" target="_blank">Go to repository</a>
+                </div>
+            </section>
+
+            <form method="post" action="{{ issue.get_rate_url }}" id="rate-form" class="section-box">
+                <div class="content">
+                    {% csrf_token %}
+                    <h3>Rate the issue complexity</h3>
+
+                    <p>By rating an issue you'll help others to find and solve this issue.</p>
+                    <p>How complex is to solve this issue?</p>
+                </div>
+                <div class="buttons">
+                    <button name="rate" class="action-button issue-rate-1" value="1" title="Rate as Very Easy">Very Easy</button>
+                    <button name="rate" class="action-button issue-rate-2" value="2" title="Rate as Easy">Easy</button>
+                    <button name="rate" class="action-button issue-rate-3" value="3" title="Rate as Medium">Medium</button>
+                    <button name="rate" class="action-button issue-rate-4" value="4" title="Rate as Hard">Hard</button>
+                    <button name="rate" class="action-button issue-rate-5" value="5" title="Rate as Very Hard">Very Hard</button>
+                </div>
+            </form>
+
+            <section class="section-box solve-section">
+                <div class="content">
+                    <h3>More from <span id="main_language">{{ issue.main_language }}</span></h3>
+
+                    <p>I can't solve this issue but I want to see other issues from {{ issue.main_language }}.</p>
+                </div>
+
+                <div class="buttons">
+                    <a href="{{ issue.main_language.link }}" class="action-button go-to-button" target="_blank">All {{ issue.main_language }} issues</a>
+                </div>
+            </section>
         </div>
 
-        <form method="post" action="{{ issue.get_rate_url }}">
-            {% csrf_token %}
-            <button name="rate" value="1" title="Rate as Very Easy">Very Easy</button>
-            <button name="rate" value="2" title="Rate as Easy">Easy</button>
-            <button name="rate" value="3" title="Rate as Medium">Medium</button>
-            <button name="rate" value="4" title="Rate as Hard">Hard</button>
-            <button name="rate" value="5" title="Rate as Very Hard">Very Hard</button>
-        </form>
+        <section>
+            <h2>Description</h2>
+            <div id="issue-body">
+                {{ issue.html | safe }}
+            </div>
+        </section>
     </article>
-</body>
-</html>
+{% endblock %}

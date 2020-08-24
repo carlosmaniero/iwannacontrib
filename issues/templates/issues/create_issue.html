@@ -1,19 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>I Wanna Contrib | Create Issue</title>
-</head>
-<body>
-    Hello!
+{% extends 'base.html' %}
 
+{% block main_content %}
     <form action="{% url "issues:create" %}" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Submit">
     </form>
-</body>
-</html>
+{% endblock %}

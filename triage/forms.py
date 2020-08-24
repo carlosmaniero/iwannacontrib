@@ -11,7 +11,7 @@ COMPLEXITY_LEVEL_WITH_EMPTY = [
 
 class SearchForm(forms.Form):
     language = forms.ModelChoiceField(queryset=ProgrammingLanguage.objects.all(), to_field_name='name', required=True)
-    rate = forms.ChoiceField(choices=COMPLEXITY_LEVEL_WITH_EMPTY, required=False, label="Difficult Level", initial='1')
+    rate = forms.ChoiceField(choices=COMPLEXITY_LEVEL_WITH_EMPTY, required=False, label="Difficult Level", initial='all')
 
     @property
     def results(self):

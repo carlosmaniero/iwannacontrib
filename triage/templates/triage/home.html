@@ -1,29 +1,167 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>I Wanna Help</title>
-</head>
-<body>
-    <h1>I Wanna Help!</h1>
+{% extends 'base.html' %}
 
-    <form action="">
-        {{ form }}
-        <button>Search</button>
-    </form>
+{% block main_content %}
+
+    <style>
+    .main-home {
+        margin: 20px 0 40px;
+    }
+    .main-home h2 {
+        margin: 0;
+        font-size: 20px;
+    }
+    .main-home h1 {
+        font-weight: 100;
+        margin: 0;
+    }
+
+    .how-to {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 20px;
+        margin-top: 20px;
+        overflow: auto;
+    }
+
+    .how-to-description {
+        background: #F0F0F2;
+        padding: 20px;
+        border-radius: 20px;
+        min-width: 150px;
+    }
+
+    .how-to-description h3 {
+        font-size: 100%;
+    }
+
+    .how-to-description p {
+        line-height: 24px;
+    }
+
+    #search-section {
+        background: #242524;
+        color: #ffffff;
+        padding: 40px 20px;
+    }
+
+    #search-section .center-content {
+        display: grid;
+    }
+
+    #search-section h1 {
+        font-weight: 100;
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #333635;
+        margin: 0 0 30px 0;
+    }
+
+    #search-section form {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-gap: 20px;
+        align-items: center;
+    }
+
+    #search-section-form {
+        display: grid;
+        grid-template-columns: auto 2fr auto 2fr;
+        grid-gap: 20px;
+        align-items: center;
+    }
+
+    #search-section-form select {
+        border: 1px solid #ccc;
+        padding: 15px;
+        background: #ffffff;
+        border-radius: 10px;
+    }
+
+    #search-section button {
+        border: 0;
+        padding: 15px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+        transition: all 0.5s;
+        width: 100%;
+    }
+
+    #search-section button:hover {
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    #result {
+        margin: 40px 0;
+    }
+
+    .result-item {
+        padding: 20px 0;
+        border-bottom: 1px solid #F0F0F2;
+    }
+
+    @media screen and (max-width: 800px){
+        #search-section-form {
+            grid-template-columns: 1fr;
+        }
+        #search-section form {
+            grid-template-columns: 1fr;
+        }
+    }
+    </style>
+
+    <main class="main-home">
+        <hgroup>
+            <h2><u>Let me contrib!</u> helps you to</h2>
+            <h1>match an open source project with your skills</h1>
+        </hgroup>
+
+        <section class="how-to">
+            <div class="how-to-description">
+                <h3>Search an Issue</h3>
+
+                <p>Use the form bellow to search an issue that matches with your coding skills.</p>
+            </div>
+
+            <div class="how-to-description">
+                <h3>Rate the issue</h3>
+
+                <p>Read and rate the complexity of the issue. That what you'll help others to find the perfect issue to work on.</p>
+            </div>
+
+            <div class="how-to-description">
+                <h3>Code</h3>
+
+                <p>Did you find the perfect match? Code and help the open source community.</p>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block after_main_content %}
+    <section id="search-section">
+        <div class="center-content">
+            <h1>Search for an issue!</h1>
+
+            <form action="#search-section-form">
+                <div id="search-section-form">
+                    {{ form }}
+                </div>
+                <div>
+                    <button>Search</button>
+                </div>
+            </form>
+        </div>
+    </section>
 
     <section id="result">
-        {% for issue in form.results %}
-            <h1>
-                <a href="{{ issue.get_url }}">
-                    {{ issue.name }}
-                </a>
-            </h1>
-        {% endfor %}
-
+        <div class="center-content">
+            {% for issue in form.results %}
+                <div class="result-item">
+                    {% include "issues/partials/issue_title.html" %}
+                </div>
+            {% endfor %}
+        </div>
     </section>
-</body>
-</html>
+{% endblock %}

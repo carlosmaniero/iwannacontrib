@@ -1,0 +1,13 @@
+<hgroup class="issue-title">
+    <h2>
+        <img src="{{ issue.get_owner_avatar }}" alt="">
+        {{ issue.get_repository_name }}
+    </h2>
+    <h1>
+        <a href="{{ issue.get_url }}">
+            <span class="issue-number">#{{ issue.number }}</span>
+            <span class="issue-rate issue-rate-{{ issue.current_rate.rate }}">{{ issue.rate_label }}</span>
+            {{ issue.name }}
+        </a>
+    </h1>
+</hgroup>

@@ -7,6 +7,10 @@ class ProgrammingLanguage(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def link(self):
+        return f'/?language={self.name}&rate=all#search-section-form'
+
     @staticmethod
     def get_other_default_language():
         return ProgrammingLanguage.objects.get_or_create(name='Other')[0]
