@@ -90,7 +90,7 @@ class CreateIssueE2E(E2ETesting):
         create_issue_page_object.submit()
 
         issue_page = IssuePageObject(self.webdriver)
-        self.assertTrue(issue_page.issue_title, '#1 Not rated yet Test Issue')
+        self.assertEquals(issue_page.issue_title, 'Python Not rated yet #1 Test Issue')
         self.assertEquals(issue_page.issue_body, 'This issue is used at project integration tests.')
         self.assertEquals(issue_page.main_language, 'Python')
         self.assertEquals(issue_page.rate_level, 'Not rated yet')
@@ -147,9 +147,9 @@ class SearchIssueE2E(E2ETesting):
         self.search_page.select_language('Python')
         self.search_page.select_rate('Not Rated')
         self.search_page.do_search()
-        self.assertEquals(self.search_page.results, ['#1 Not rated yet Test Issue'])
+        self.assertEquals(self.search_page.results, ['Python Not rated yet #1 Test Issue'])
 
-        self.search_page.click_at_result('#1 Not rated yet Test Issue')
+        self.search_page.click_at_result('Python Not rated yet #1 Test Issue')
 
         self.assertTrue(self.issue_page.issue_title, 'Test Issue')
         self.assertEquals(self.issue_page.issue_body, 'This issue is used at project integration tests.')
