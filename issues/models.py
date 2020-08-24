@@ -28,6 +28,7 @@ class Issue(models.Model):
         on_delete=models.CASCADE,
     )
     current_rate = models.ForeignKey(IssueRate, null=True, default=None, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = (("repository", "number"),)

@@ -47,4 +47,14 @@ class SearchFormTesting(TestCase):
             "rate": 'all'
         })
 
-        self.assertEquals(list(form.results), [easy_issue, not_rated_issue])
+        self.assertEquals(list(form.results), [not_rated_issue, easy_issue])
+
+    def test_it_returns_the_20_latest_added_by_default(self):
+        fixture = IssueFixture()
+
+        all_issues = [fixture.add() for i in range(30)]
+
+        form = SearchForm()
+
+        self.assertEquals(len(form.results), 20)
+        self.assertEquals(list(form.results), list(reversed(all_issues))[0:20])

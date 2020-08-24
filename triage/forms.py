@@ -16,7 +16,7 @@ class SearchForm(forms.Form):
     @property
     def results(self):
         if not self.is_valid():
-            return
+            return Issue.objects.all().order_by('-created_at')[:20]
 
         rate = self._get_rate()
 
@@ -27,7 +27,7 @@ class SearchForm(forms.Form):
         if rate != 'all':
             query.update(current_rate__rate=rate)
 
-        return Issue.objects.filter(**query)
+        return Issue.objects.filter(**query).order_by('-created_at')[:1000]
 
     def _get_rate(self):
         rate = self.cleaned_data.get('rate')

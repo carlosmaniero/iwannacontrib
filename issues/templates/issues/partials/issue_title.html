@@ -5,8 +5,9 @@
     </h2>
     <h1>
         <a href="{{ issue.get_url }}">
-            <span class="issue-number">#{{ issue.number }}</span>
+            <span class="issue-language">{{ issue.main_language }}</span>
             <span class="issue-rate issue-rate-{{ issue.current_rate.rate }}">{{ issue.rate_label }}</span>
+            <span class="issue-number">#{{ issue.number }}</span>
             {{ issue.name }}
         </a>
     </h1>
