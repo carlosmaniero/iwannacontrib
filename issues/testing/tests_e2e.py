@@ -1,6 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
+from issues.testing.test_fixture import IssueFixture
 from testing.e2e import E2ETesting, BasePageObject
 
 
@@ -98,13 +99,8 @@ class CreateIssueE2E(E2ETesting):
 
 class RatingIssueE2E(E2ETesting):
     def setUp(self) -> None:
-        self.fetch('/issues/create')
-        create_issue_page_object = CreateIssuePageObject(self.webdriver)
-        create_issue_page_object.fill_url(
-            "https://github.com/carlosmaniero/iwannacontrib-issues-test-integration-test/issues/1"
-        )
-        create_issue_page_object.submit()
-
+        issue = IssueFixture().add()
+        self.fetch(issue.get_url())
         self.issue_page = IssuePageObject(self.webdriver)
 
     def test_rates_issues_as_very_easy(self):
@@ -122,6 +118,10 @@ class RatingIssueE2E(E2ETesting):
     def test_rates_issues_as_very_hard(self):
         self.assert_level('Very Hard')
 
+    def test_it_shows_a_message_saying_that_the_vote_was_registered(self):
+        self.issue_page.rate('Easy')
+        self.assertEquals(self.issue_page.messages, ['You vote has been registered. Thank you for voting.'])
+
     def assert_level(self, level):
         self.issue_page.rate(level)
         self.assertEquals(self.issue_page.rate_level, level)
@@ -129,12 +129,7 @@ class RatingIssueE2E(E2ETesting):
 
 class SearchIssueE2E(E2ETesting):
     def setUp(self) -> None:
-        self.fetch('/issues/create')
-        create_issue_page_object = CreateIssuePageObject(self.webdriver)
-        create_issue_page_object.fill_url(
-            "https://github.com/carlosmaniero/iwannacontrib-issues-test-integration-test/issues/1"
-        )
-        create_issue_page_object.submit()
+        IssueFixture().add()
         self.fetch('/')
         self.issue_page = IssuePageObject(self.webdriver)
         self.search_page = SearchPageObject(self.webdriver)
@@ -147,10 +142,10 @@ class SearchIssueE2E(E2ETesting):
         self.search_page.select_language('Python')
         self.search_page.select_rate('Not Rated')
         self.search_page.do_search()
-        self.assertEquals(self.search_page.results, ['Python Not rated yet #1 Test Issue'])
+        self.assertEquals(self.search_page.results, ['Python Not rated yet #1 any title 1'])
 
-        self.search_page.click_at_result('Python Not rated yet #1 Test Issue')
+        self.search_page.click_at_result('Python Not rated yet #1 any title 1')
 
         self.assertTrue(self.issue_page.issue_title, 'Test Issue')
-        self.assertEquals(self.issue_page.issue_body, 'This issue is used at project integration tests.')
+        self.assertEquals(self.issue_page.issue_body, 'any body')
         self.assertEquals(self.issue_page.main_language, 'Python')

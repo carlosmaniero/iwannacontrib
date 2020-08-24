@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from github import Github
 
@@ -42,5 +43,7 @@ def rate(request, owner: str, repository: str, number: int):
 
     issue.rate(int(request.POST['rate']))
     issue.save()
+
+    messages.add_message(request, messages.SUCCESS, 'You vote has been registered. Thank you for voting.')
 
     return redirect(issue.get_url())

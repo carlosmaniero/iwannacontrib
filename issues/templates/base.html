@@ -100,6 +100,7 @@
         .issue-title h1 span.issue-number {
             background: #F0F0F2;
         }
+
         .issue-title h1 span.issue-language {
             background: #e45686;
         }
@@ -107,6 +108,14 @@
         .issue-title a {
             color: #000000;
             text-decoration: none;
+        }
+
+        .messages {
+            background: #00c39b;
+            margin: -20px 0 40px;
+            line-height: 48px;
+            list-style: none;
+            text-align: center;
         }
     </style>
 </head>
@@ -122,6 +131,13 @@
             </div>
         </div>
     </header>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     <div class="center-content">
         {% block main_content %}

@@ -63,3 +63,7 @@ class E2ETesting(LiveServerTestCase):
 class BasePageObject:
     def __init__(self, webdriver: WebDriver):
         self.webdriver = webdriver
+
+    @property
+    def messages(self):
+        return [message.text for message in self.webdriver.find_elements_by_css_selector('.messages li')]
