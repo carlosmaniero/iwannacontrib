@@ -104,6 +104,13 @@
         border-bottom: 1px solid #F0F0F2;
     }
 
+    .publish_issue_section {
+        padding: 45px 0 0 0;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 100;
+    }
+
     @media screen and (max-width: 800px){
         #search-section-form {
             grid-template-columns: 1fr;
@@ -139,6 +146,11 @@
                 <p>Did you find the perfect match? Code and help the open source community.</p>
             </div>
         </section>
+
+        <div class="publish_issue_section">
+            <p>Do you have an open source project? Publish an issue and get help from others.</p>
+            <p><a href="{% url 'issues:create' %}" class="publish_issue publish_issue_big">Publish an Issue</a></p>
+        </div>
     </main>
 {% endblock %}
 
