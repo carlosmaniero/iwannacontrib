@@ -139,7 +139,7 @@ class SearchIssueE2E(E2ETesting):
         self.assertEquals(self.search_page.all_rates, ['', 'all', '1', '2', '3', '4', '5'])
 
     def test_default_seo_information(self):
-        self.assertEquals(self.search_page.page_title, 'Be a contributor to open source | Let me Contrib!')
+        self.assertEquals(self.search_page.page_title, 'Be a contributor to open source | Contrib World')
         self.assertEquals(
             self.search_page.meta_description,
             'Find an issue that is perfect with your skills and contribute to open source projects.'
@@ -150,7 +150,7 @@ class SearchIssueE2E(E2ETesting):
         self.search_page.select_rate('Not Rated')
         self.search_page.do_search()
 
-        self.assertEquals(self.search_page.page_title, 'Let me contrib with Python to Open Source | Let me Contrib!')
+        self.assertEquals(self.search_page.page_title, 'Let me contrib with Python to Open Source | Contrib World')
 
         self.assertEquals(
             self.search_page.meta_description,
@@ -166,7 +166,7 @@ class SearchIssueE2E(E2ETesting):
 
         self.search_page.click_at_result('Python Not rated yet #1 any title 1')
 
-        self.assertEquals(self.issue_page.page_title, 'Contrib to a Python issue: any title 1 | Let me Contrib!')
+        self.assertEquals(self.issue_page.page_title, 'Contrib to a Python issue: any title 1 | Contrib World')
         self.assertEquals(
             self.issue_page.meta_description,
             'The Python repository iwannacontrib-issues-test-integration-test needs your help. Contribute to any '
